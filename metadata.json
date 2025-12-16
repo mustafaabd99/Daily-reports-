@@ -1,0 +1,7 @@
+{
+  "name": "نظام التقرير اليومي",
+  "description": "Professional Daily Reporting System for Maintenance Departments",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
