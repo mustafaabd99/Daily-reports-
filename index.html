@@ -1,20 +1,27 @@
 
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>نظام التقرير اليومي - قسم الصيانة</title>
+    <meta name="theme-color" content="#1e40af" />
+    <title>Daily Reporting System - Maintenance Dept</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <!-- ExcelJS for professional Excel export -->
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <!-- html2pdf for direct PDF download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Cairo', 'sans-serif'],
+              sans: ['Inter', 'sans-serif'],
             },
             colors: {
               primary: '#1e40af', // Corporate Blue
@@ -29,8 +36,7 @@
     </script>
     <style>
       body {
-        font-family: 'Cairo', sans-serif;
-        /* Professional Gradient Background */
+        font-family: 'Inter', sans-serif;
         background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
         color: #1f2937;
         -webkit-tap-highlight-color: transparent;
@@ -42,12 +48,6 @@
       .no-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
-      }
-      .form-input {
-        transition: all 0.3s ease;
-      }
-      .form-input:focus {
-        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
       }
       
       @media print {
@@ -77,5 +77,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('SW registered'))
+            .catch(err => console.log('SW failed', err));
+        });
+      }
+    </script>
   </body>
 </html>

@@ -43,19 +43,22 @@ const generateSeedData = (): Report[] => {
       activities: [
         {
           id: "act-1", description: "Preventive Maintenance for Crude Oil Pump P-101 A", type: "PM", permitNo: "PTW-2024-889", 
-          discipline: "ميكانيك (Mechanical)", equipNo: "P-101-A", location: "OPS", status: "مكتمل", 
+          // Fix: Changed Arabic status to 'Completed' to match Activity type
+          discipline: "ميكانيك (Mechanical)", equipNo: "P-101-A", location: "OPS", status: "Completed", 
           workers: "4", startTime: "08:00", endTime: "14:00", remarks: "Oil changed"
         },
         {
           id: "act-2", description: "Alignment check for Water Injection Pump", type: "CM", permitNo: "PTW-2024-890", 
-          discipline: "ميكانيك (Mechanical)", equipNo: "WIP-205", location: "OPS", status: "قيد التنفيذ", 
+          // Fix: Changed Arabic status to 'In Progress' to match Activity type
+          discipline: "ميكانيك (Mechanical)", equipNo: "WIP-205", location: "OPS", status: "In Progress", 
           workers: "2", startTime: "14:00", endTime: "16:00", remarks: "High vibration detected"
         }
       ],
       tomorrowPlan: [
         {
           id: "plan-1", description: "Continue alignment for WIP-205", type: "CM", permitNo: "PTW-2024-890",
-          discipline: "ميكانيك (Mechanical)", equipNo: "WIP-205", location: "OPS", priority: "عالية",
+          // Fix: Changed Arabic priority to 'High' to match TomorrowActivity type
+          discipline: "ميكانيك (Mechanical)", equipNo: "WIP-205", location: "OPS", priority: "High",
           workers: "2", startTime: "07:00", endTime: "12:00", remarks: ""
         }
       ],
@@ -82,14 +85,16 @@ const generateSeedData = (): Report[] => {
       activities: [
         {
           id: "act-3", description: "Cable tray repair and grounding check", type: "PM", permitNo: "PTW-2024-750", 
-          discipline: "كهرباء (Electrical)", equipNo: "JB-501", location: "WPS", status: "مكتمل", 
+          // Fix: Changed Arabic status to 'Completed' to match Activity type
+          discipline: "كهرباء (Electrical)", equipNo: "JB-501", location: "WPS", status: "Completed", 
           workers: "2", startTime: "09:00", endTime: "15:00", remarks: "Replaced corroded bolts"
         }
       ],
       tomorrowPlan: [
          {
           id: "plan-2", description: "Terminate cables for new lighting pole", type: "CM", permitNo: "NEW",
-          discipline: "كهرباء (Electrical)", equipNo: "LP-09", location: "WPS", priority: "متوسطة",
+          // Fix: Changed Arabic priority to 'Medium' to match TomorrowActivity type
+          discipline: "كهرباء (Electrical)", equipNo: "LP-09", location: "WPS", priority: "Medium",
           workers: "2", startTime: "08:00", endTime: "16:00", remarks: ""
         }
       ]
@@ -112,7 +117,8 @@ export const saveReport = (report: Omit<Report, 'id' | 'timestamp'>): boolean =>
     localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
     return true;
   } catch (e) {
-    console.error("Storage failed", e);
+    console.error("Storage failed (Limit Reached?)", e);
+    alert("فشل الحفظ: قد تكون مساحة التخزين ممتلئة. حاول حذف تقارير قديمة أو تقليل حجم الصور.");
     return false;
   }
 };
@@ -155,6 +161,32 @@ export const getReports = (): Report[] => {
     return [];
   }
 };
+
+export const getLastReport = (): Report | undefined => {
+    const reports = getReports();
+    if(reports.length > 0) return reports[0];
+    return undefined;
+};
+
+// --- BACKUP & RESTORE ---
+
+export const getBackupData = (): string => {
+    return localStorage.getItem(STORAGE_KEY) || '[]';
+}
+
+export const restoreBackupData = (jsonString: string): boolean => {
+    try {
+        const parsed = JSON.parse(jsonString);
+        if(!Array.isArray(parsed)) return false;
+        // Basic validation check
+        if(parsed.length > 0 && !parsed[0].id) return false;
+        
+        localStorage.setItem(STORAGE_KEY, jsonString);
+        return true;
+    } catch(e) {
+        return false;
+    }
+}
 
 // Define ExcelJS interface since we load it via CDN
 declare global {

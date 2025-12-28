@@ -21,11 +21,12 @@ export interface Activity {
   discipline: string;
   equipNo: string;
   location: string;
-  status: 'مكتمل' | 'قيد التنفيذ' | 'متوقف' | '';
+  status: 'Completed' | 'In Progress' | 'Stopped' | '';
   workers: string;
   startTime: string;
   endTime: string;
   remarks: string;
+  imageUrl?: string;
 }
 
 export interface TomorrowActivity {
@@ -36,7 +37,7 @@ export interface TomorrowActivity {
   discipline: string;
   equipNo: string;
   location: string;
-  priority: 'عالية' | 'متوسطة' | 'منخفضة' | '';
+  priority: 'High' | 'Medium' | 'Low' | '';
   workers: string;
   startTime: string;
   endTime: string;
@@ -84,16 +85,16 @@ export const JOB_TITLES = [
 ];
 
 export const DEPARTMENTS = [
-  "الهندسة",
-  "الصيانة",
-  "التشغيل",
-  "الأمان",
-  "الجودة"
+  "Engineering",
+  "Maintenance",
+  "Operations",
+  "Safety / HSE",
+  "Quality Control"
 ];
 
 export const DISCIPLINES = [
-  "كهرباء (Electrical)",
-  "ميكانيك (Mechanical)",
-  "آلات دقيقة (Instrument)",
-  "أخرى (Other)"
+  "Electrical",
+  "Mechanical",
+  "Instrument",
+  "Others"
 ];
